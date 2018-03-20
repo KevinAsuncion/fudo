@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Fudo-Food and Nutrition Assistant</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Oxygen|Varela+Round" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
-        <link rel="stylesheet" type="text/css" href="index.css">
-    </head>
-    <body>
-        <header role="banner">
-            <section role="region" id="hero">
-                <div id="greeting-container">
-                    <h1 id="greeting">Hi, I'm Fudo your new favorite food and nutrition assistant.</h1>
-                    <p id="error" aria-live="assertive" hidden></p>
-                    <p id="instructions">
-                        I'm a voice controlled assistant who can analyze food or get you recipes. Press the start button and speak your requests,
-                        when you are done click the stop button and submit. You can also type your request in the box below and
-                        press submit if you prefer. For nutrition analysis include the word "analyze" folowed by the quanity
-                        and the ingredient(e.g "Analyze 1 egg"). For recipes simply include the ingredient with the word "recipes"(e.g
-                        "Chickpea recipes").
-                        <a href="#" id="remove-instructions">Remove Instructions</a>
-                    </p>
-                    <button id="speech-btn">
-                        <i class="fas fa-microphone"></i> Start</button>
-                    <button id="stop-speech-btn">
-                        <i class="fas fa-microphone-slash"></i> Stop</button>
-                    <form role="form" id="search-form">
-                        <fieldset>
-                            <textarea id="text-area" placeholder="Analyze 8 ounces of salmon, 1 cup of rice" rows="6" aria-live="assertive" aria-label="text-area"
-                                required></textarea>
-                            <button id="submit-btn">Submit</button>
-                        </fieldset>
-                    </form>
-                </div>
-            </section>
-        </header>
-        <main role="main">
-            <div id="results" aria-live="assertive"></div>
-            <button id="show-more-recipes" hidden>Show More</button>
-        </main>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l"
-            crossorigin="anonymous"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c"
-            crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="index.js"></script>
-    </body>
+<head>
+    <meta charset="utf-8">
+    <title>Fudo-Food and Nutrition Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen|Varela+Round" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+    <header role="banner">
+        <section role="region" id="hero">
+            <div id="greeting-container">
+                <h1 id="greeting">Hi, I'm Fudo your new favorite food and nutrition assistant.</h1>
+                <p id="error" aria-live="assertive" hidden></p>
+                <p id="instructions">
+                    I'm a voice controlled assistant who can analyze food or get you recipes. Press the start button and speak your requests,
+                    when you are done click the stop button and submit. You can also type your request in the box below and
+                    press submit if you prefer. For nutrition analysis include the word "analyze" folowed by the quanity
+                    and the ingredient(e.g "Analyze 1 egg"). For recipes simply include the ingredient with the word "recipes"(e.g
+                    "Chickpea recipes").
+                    <a href="#" id="remove-instructions">Remove Instructions</a>
+                </p>
+                <button id="speech-btn">
+                    <i class="fas fa-microphone"></i> Start</button>
+                <button id="stop-speech-btn">
+                    <i class="fas fa-microphone-slash"></i> Stop</button>
+                <form role="form" id="search-form">
+                    <fieldset>
+                        <textarea id="text-area" placeholder="Analyze 8 ounces of salmon, 1 cup of rice" rows="6" aria-live="assertive" aria-label="text-area"
+                            required></textarea>
+                        <button id="submit-btn">Submit</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </header>
+    <main role="main">
+        <div id="results" aria-live="assertive"></div>
+        <button id="show-more-recipes" hidden>Show More</button>
+    </main>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l"
+        crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="index.js"></script>
+</body>
 </html>

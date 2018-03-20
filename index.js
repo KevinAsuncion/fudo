@@ -14,28 +14,20 @@ function handleSubmitButton() {
 }
 
 function parseRequest(request) {
+    clearResults();
+    checkIfShowMoreIsVisible();
     request = request.toLowerCase();
     if (request.includes('recipe')) {
-        if ($('#show-more-recipes').is(':visible')) {
-            toggleShowMoreRecipes();
-        };
-        clearResults();
         recipeStart = 12;
         getRecipeData(request);
     } else if (request.includes('analyze')) {
         nutrientCount = {};
-        if ($('#show-more-recipes').is(':visible')) {
-            toggleShowMoreRecipes();
-        };
-        clearResults();
         getNutritionData(request);
     } else {
-        if ($('#show-more-recipes').is(':visible')) {
-            toggleShowMoreRecipes();
-        };
         apiError();
     }
 }
+
 
 function removeInstructions() {
     $('#remove-instructions').on('click', function (e) {
@@ -45,6 +37,12 @@ function removeInstructions() {
 
 function clearResults() {
     $('#results').empty();
+}
+
+function checkIfShowMoreIsVisible() {
+    if ($('#show-more-recipes').is(':visible')) {
+        toggleShowMoreRecipes();
+    };
 }
 
 /*--------------------API Calls---------------------*/
@@ -63,7 +61,7 @@ function getNutritionData(searchTerm) {
         success: function (data) {
             const foods = data.foods;
 
-            if (foods.length === 0) {
+            if (!foods) {
                 noResultsError();
             } else {
                 calculateMacronutrients(foods);
@@ -90,7 +88,7 @@ function getRecipeData(searchTerm) {
     };
     $.getJSON(url, query, function (data) {
         const results = data.hits;
-        if (results.length === 0) {
+        if (!results) {
             noResultsError();
         } else {
             renderRecipes(results);
@@ -102,8 +100,9 @@ function getRecipeData(searchTerm) {
 
 function noResultsError() {
     $('#error').toggle().html(`
-    <div id="error-container">
-    <p>No results. Try checking your spelling or rewording your request and resubmitting.  If that doesn't work try a different request.<a href="#" id="empty-error"> [X]</a></p>
+      <div id="error-container">
+         <p>No results. Try checking your spelling or rewording your request and resubmitting.  If that doesn't work try a different request <a href="#" id="empty-error"> [X]</a>
+         </p>
     </div>
     `);
     emptyError();
@@ -112,7 +111,8 @@ function noResultsError() {
 function apiError() {
     $('#error').toggle().html(`
     <div id="error-container">
-    <p>No results. Try checking your spelling or rewording your request and resubmitting. If that doesn't work try a different request.<a href="#" id="empty-error"> [X]</a></p>
+      <p>Looks like there was an error.Try checking your spelling or rewording your request and resubmitting. If that doesn't work try your request at a later time <a href="#" id="empty-error"> [X]</a>
+      </p>
     </div>
     `);
     emptyError();
@@ -146,8 +146,8 @@ function renderRecipes(results) {
             image: result.recipe.image,
             title: result.recipe.label,
             url: result.recipe.url
-        }
-    })
+        };
+    });
     let recipeList = recipes.map(recipe => {
         return `
         <div class ="recipe-card">
