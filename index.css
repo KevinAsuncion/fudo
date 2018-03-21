@@ -65,7 +65,7 @@ button:hover {
 }
 
 #instructions {
-  font-size: 16px;
+    font-size: 16px;
 }
 
 #remove-instructions {
@@ -108,8 +108,8 @@ fieldset {
 }
 
 #empty-error {
-  color: white;
-  text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 /*---------------------- Results Section --------------------------*/
 
@@ -171,7 +171,7 @@ fieldset {
 }
 
 #macros-chart-card, #micros-chart-card, #calories-card {
-    width: 100%;
+    width: 90%;
     background-color: white;
     height: auto;
     margin-left: auto;
@@ -197,47 +197,48 @@ fieldset {
 
 @media only screen and (max-width:450px) {
     #macros-chart-card, #micros-chart-card, #calories-card  {
-        padding-left: 0;
-        padding-right: 0;
+        width: 100%;
+        padding-left: 2px;
+        padding-right: 2px;
         padding-bottom: 10px;
         margin: 10px 0;
         border-radius: 0;
     }
     #greeting {
-      padding: 20px;
-      font-size: 20px;
-      margin-bottom: 0;
+        padding: 20px;
+        font-size: 20px;
+        margin-bottom: 0;
     }
     #remove-instructions {
-      font-size: 14px;
+        font-size: 14px;
     }
     #instructions{
-      font-size: 12px;
-      margin-top: 0;
+        font-size: 12px;
+        margin-top: 0;
    }
    #error {
-     font-size: 12px;
-     margin-top: 0;
+        font-size: 12px;
+        margin-top: 0;
    }
    button {
-     margin: 5px 5px;
-     width: 100px;
+        margin: 5px 5px;
+        width: 100px;
    }
    #calories {
-     margin-top:20px ;
-     font-size: 36px ;
+        margin-top:20px ;
+        font-size: 36px ;
    }
-    .recipe-card {
-     width: 250px;
+   .recipe-card {
+        width: 250px;
    }
 }
 
 @media only screen and (min-width:450px) and (max-width:600px){
    #greeting {
-      font-size: 24px;
-      padding-bottom: 10px;
+       font-size: 24px;
+       padding-bottom: 10px;
    }
    #instructions{
-     font-size: 14px;
+       font-size: 14px;
    } 
 }
