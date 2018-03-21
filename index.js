@@ -319,7 +319,7 @@ function makeMicrosChart(micronutrients) {
 function noSpeechRecogntion() {
     $('#speech-btn, #stop-speech-btn').hide();
     $('#instructions').text(`
-      Want to know the nutrition of a meal? Ask me to analyze the ingredients. Don't know what to cook, why not ask me for recipes? For nutrition analysis type - "analyze" followed by the quantities and ingredients for each food, for example try "Analyze 1 cup of rice and 2 eggs". For recipes simply input the ingredient, cusine or specific dish with the keyword "recipes", for example try Sweet potato recipes".  Oh by the way if you open me up in the Chrome you can speak your requests.
+      Want to know the nutrition of a meal? Ask me to analyze the ingredients. Don't know what to cook, why not ask me for recipes? For nutrition analysis type - "analyze" followed by the quantities and ingredients for each food, for example try "Analyze 1 cup of rice and 2 eggs". For recipes simply input the ingredient, cusine or specific dish with the keyword "recipes", for example try Sweet potato recipes".  Oh by the way if you open me up in Chrome you can speak your requests.
   `).append(`<a href="#" id="remove-instructions">Remove instructions</a>`);
 }
 
