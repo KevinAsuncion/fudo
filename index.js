@@ -106,7 +106,7 @@ function getRecipeData(searchTerm, recipeStart) {
 function handleError() {
     $('#error').toggle().html(`
       <div id="error-container">
-         <p>Looks like there was an error.  Try checking your spelling or rewording your request and resubmitting. Make sure to include the keywords "analyze" or "recipes" in your request. If none of those work try again at a later time.<a href="#" id="empty-error">  [X]</a>
+         <p>Looks like there was an error.  Try checking your spelling or rewording your request and resubmitting. Make sure to include the keywords "analyze" or "recipes". If none of those suggestions work try again at a later time.<a href="#" id="empty-error">  [X]</a>
          </p>
     </div>
     `);
