@@ -4,9 +4,10 @@ var searchTerm;
 
 function handleSubmitButton() {
     $('#search-form').submit(function (e) {
+        loadingShow();
+        e.preventDefault();
         searchTerm = '';
         content = '';
-        e.preventDefault();
         searchTerm = $('#text-area').val();
         $('#text-area').val('');
         parseRequest(searchTerm);
@@ -14,20 +15,17 @@ function handleSubmitButton() {
 }
 
 function parseRequest(request) {
-    clearResults();
     checkIfShowMoreIsVisible();
     request = request.toLowerCase();
     if (request.includes('recipe')) {
-        recipeStart = 12;
         getRecipeData(request);
     } else if (request.includes('analyze')) {
-        nutrientCount = {};
         getNutritionData(request);
     } else {
-        apiError();
+        handleError();
+        loadingHide();
     }
 }
-
 
 function removeInstructions() {
     $('#remove-instructions').on('click', function (e) {
@@ -35,15 +33,14 @@ function removeInstructions() {
     });
 }
 
-function clearResults() {
-    $('#results').empty();
+function loadingShow() {
+    $('#submit-btn').text('Loading...').prop('disabled', true);
 }
 
-function checkIfShowMoreIsVisible() {
-    if ($('#show-more-recipes').is(':visible')) {
-        toggleShowMoreRecipes();
-    };
+function loadingHide() {
+    $('#submit-btn').text('Submit').prop('disabled', false);
 }
+
 
 /*--------------------API Calls---------------------*/
 
@@ -59,10 +56,10 @@ function getNutritionData(searchTerm) {
             'query': searchTerm,
         },
         success: function (data) {
+            loadingHide();
             const foods = data.foods;
-
-            if (!foods) {
-                noResultsError();
+            if (foods.length === 0) {
+                handleError();
             } else {
                 calculateMacronutrients(foods);
                 calculateMicronutrients(foods);
@@ -70,49 +67,47 @@ function getNutritionData(searchTerm) {
             }
         },
         error: function () {
-            apiError();
+            handleError();
+            loadingHide();
         }
     });
 }
 
-
-function getRecipeData(searchTerm) {
-    let url = 'https://api.edamam.com/search';
-    let id = '54f6a76e';
-    let key = 'ed9fa62cc29a1ae5e51dff6c1f623e40';
-    let query = {
-        q: searchTerm,
-        to: recipeStart,
-        app_id: id,
-        app_key: key
-    };
-    $.getJSON(url, query, function (data) {
-        const results = data.hits;
-        if (!results) {
-            noResultsError();
-        } else {
-            renderRecipes(results);
+function getRecipeData(searchTerm, recipeStart) {
+    recipeStart = recipeStart || 12;
+    $.ajax({
+        url: 'https://api.edamam.com/search',
+        type: 'get',
+        data: {
+            q: searchTerm,
+            to: recipeStart,
+            app_id: '54f6a76e',
+            app_key: 'ed9fa62cc29a1ae5e51dff6c1f623e40'
+        },
+        success: function (data) {
+            loadingHide();
+            const results = data.hits;
+            if (results.length === 0) {
+                handleError();
+            } else {
+                renderRecipes(results);
+            }
+        },
+        error: function () {
+            handleError();
+            loadingHide();
         }
     });
 }
 
 /*--------------------Error Functions---------------------*/
 
-function noResultsError() {
+
+function handleError() {
     $('#error').toggle().html(`
       <div id="error-container">
-         <p>No results. Try checking your spelling or rewording your request and resubmitting.  If that doesn't work try a different request <a href="#" id="empty-error"> [X]</a>
+         <p>Looks like there was an error.  Try checking your spelling or rewording your request and resubmitting. Make sure to include the keywords "analyze" or "recipes" in your request. If none of those work try again at a later time.<a href="#" id="empty-error">  [X]</a>
          </p>
-    </div>
-    `);
-    emptyError();
-}
-
-function apiError() {
-    $('#error').toggle().html(`
-    <div id="error-container">
-      <p>Looks like there was an error.Try checking your spelling or rewording your request and resubmitting. If that doesn't work try your request at a later time <a href="#" id="empty-error"> [X]</a>
-      </p>
     </div>
     `);
     emptyError();
@@ -126,17 +121,22 @@ function emptyError() {
 
 /*--------------------Recipe Functions---------------------*/
 
-var recipeStart;
-
 function toggleShowMoreRecipes() {
     $('#show-more-recipes').toggle();
 }
 
+function checkIfShowMoreIsVisible() {
+    if ($('#show-more-recipes').is(':visible')) {
+        toggleShowMoreRecipes();
+    };
+}
+
 function handleShowMoreRecipesButton() {
+    var recipeStart = 12;
     $('#show-more-recipes').on('click', function (e) {
         e.preventDefault();
         recipeStart = recipeStart + 12;
-        getRecipeData(searchTerm);
+        getRecipeData(searchTerm, recipeStart);
     });
 }
 
@@ -162,12 +162,19 @@ function renderRecipes(results) {
     };
 }
 
+function loadingShowMore() {
+    $('#show-more-recipes').text('Loading...').prop('disabled', true);
+}
+
+function loadingShowMoreHide() {
+    $('#show-more-recipes').text('Show More').prop('disabled', false);
+}
+
 
 /*--------------------Nutrition Analysis Functions---------------------*/
 
 const NUTRIENTS_ATTR_ID = [291, 301, 304, 307, 309, 320, 323, 401];
 const NUTRIENTS_RDA = [25, 1000, 380, 2000, 10, 800, 15, 80];
-var nutrientCount = {};
 
 function calculateCalories(foods) {
     const calories = Math.round(foods.map(food => food.nf_calories).reduce((a, b) => a + b));
@@ -175,13 +182,14 @@ function calculateCalories(foods) {
 }
 
 function calculateMicronutrients(foods) {
+    var nutrientCount = {};
     foods.forEach(food => {
         NUTRIENTS_ATTR_ID.forEach(id => {
             var nutrient = food.full_nutrients.find(nutrient => {
                 return nutrient.attr_id === id;
             });
             if (nutrient) {
-                consolidateNutrientData(nutrient);
+                consolidateNutrientData(nutrient, nutrientCount);
             }
         });
     });
@@ -198,7 +206,7 @@ function calculateMacronutrients(foods) {
     makeMacrosChart(macronutrients);
 }
 
-function consolidateNutrientData(item) {
+function consolidateNutrientData(item, nutrientCount) {
     if (nutrientCount.hasOwnProperty(item.attr_id)) {
         nutrientCount[item.attr_id] += item.value;
     } else {
@@ -213,8 +221,13 @@ function renderCalories(calories) {
 /*--------------------Nutrition Chart Functions---------------------*/
 
 function renewCanvas() {
+    // To render new charts - need to remove the current ones and render new canvas
+
     $('canvas').remove();
     $('#results').html(` 
+      <div id="calories-card">
+        <div id="calories"></div>
+      </div>
       <div id="micros-chart-card">
         <canvas id="micros" width="300" height="200"></canvas>
       </div>
@@ -222,13 +235,11 @@ function renewCanvas() {
        <canvas id="macros" width="300" height="200"></canvas>
       </div>
     `);
-    $('#results').prepend(`
-        <div id="calories-card"><div id="calories"></div></div>
-    `);
 }
 
 function makeMacrosChart(macronutrients) {
     renewCanvas();
+    //Chart.js Config 
     var macros = $("#macros");
     var macrosChart = new Chart(macros, {
         type: 'doughnut',
@@ -254,10 +265,13 @@ function makeMacrosChart(macronutrients) {
             }
         }
     });
+    //accessibility for charts
+    $('#macros-chart-card > iframe').attr('title', 'macros-chart');
 }
 
 function makeMicrosChart(micronutrients) {
     var micros = $("#micros");
+    //Chart.js Config
     var microsChart = new Chart(micros, {
         type: 'bar',
         data: {
@@ -296,45 +310,49 @@ function makeMicrosChart(micronutrients) {
             }
         }
     });
+    //accessibility for charts
+    $('#micros-chart-card > iframe').attr('title', 'micros-chart');
 }
 
 /*--------------------Speech Recognition Functions---------------------*/
 
 function noSpeechRecogntion() {
-    $('#speech-btn').hide();
-    $('#stop-speech-btn').hide();
-    $('#instructions').html(`
-  <p id="instructions">Want to know the nutrition of a meal? Ask me to analyze the ingredients. Don't know what to cook, why not ask me for recipes? For nutrition analysis type "Analyze 1 cup of rice and 2 eggs" -always include the "analyze" keyword followed by the quantity and ingredient. For recipes simply input the ingredient with the keyword "recipes" for example try Sweet potato recipes".  Oh by the way if you open me up in the Chrome you can speak your requests. <a href="#" id="remove-instructions">Remove instructions</a></p> 
-  `);
+    $('#speech-btn, #stop-speech-btn').hide();
+    $('#instructions').text(`
+      Want to know the nutrition of a meal? Ask me to analyze the ingredients. Don't know what to cook, why not ask me for recipes? For nutrition analysis type - "analyze" followed by the quantities and ingredients for each food, for example try "Analyze 1 cup of rice and 2 eggs". For recipes simply input the ingredient, cusine or specific dish with the keyword "recipes", for example try Sweet potato recipes".  Oh by the way if you open me up in the Chrome you can speak your requests.
+  `).append(`<a href="#" id="remove-instructions">Remove instructions</a>`);
 }
 
-function handleStopSpeechButton() {
-    $('#stop-speech-btn').on('click', function () {
-        recognition.stop();
-    });
-}
 
+//Check if speech recognition is available
 if (!('webkitSpeechRecognition' in window)) {
     noSpeechRecogntion();
 } else {
+    //Speech recognition config
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
-
     const textArea = $('#text-area');
     var content = '';
 
     recognition.onresult = function (event) {
-        var current = event.resultIndex;
-        var transcript = event.results[current][0].transcript;
-        content += transcript;
-        textArea.val(content);
+        let current = event.resultIndex;
+        let transcript = event.results[current][0].transcript;
+        //Handle the repeat bug on mobile devices 
+        let mobileBug = (current == 1 && transcript == event.results[0][0].transcript);
+        if (!mobileBug) {
+            content += transcript;
+            textArea.val(content);
+        }
     };
     $('#speech-btn').on('click', function (e) {
         if (content.length) {
             content += ' ';
         }
         recognition.start();
+    });
+    $('#stop-speech-btn').on('click', function () {
+        recognition.stop();
     });
 }
 
