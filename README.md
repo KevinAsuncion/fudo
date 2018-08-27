@@ -1,5 +1,9 @@
 # Fudo
-The Fudo app is a voice controlled food and nutrition assistant.  Currently it can search for recipes based on different parameters like cuisine, dish, or ingredient.  It can also analyze the nutrition of any ingredient or combination of ingredients.  
+The Fudo app is a voice controlled food and nutrition assistant.  Currently it can search for recipes based on different parameters like cuisine, dish, or ingredient.  It can also analyze the nutrition of any ingredient or combination of ingredients. 
+
+# Live Demo
+<a href="https://kevinasuncion.github.io/fudo/">DEMO</a> 
+
 # Motivation
 I wanted a voice controlled app that could analyze the nutritional composition of any meal as well as perform other helpful tasks like help me discover new recipes. 
 # Screenshots
@@ -21,9 +25,6 @@ Recipes
 
 # Built With 
 HTML, CSS, Javascript, jQuery
-
-# Live Demo
-<a href="https://kevinasuncion.github.io/fudo/">DEMO</a>
 
 # Features
 <ul>
